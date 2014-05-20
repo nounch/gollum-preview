@@ -2,7 +2,7 @@
 
 ## Description
 
-gollum-preview lets you preview file and directory changes in a [Gollum](https://github.com/gollum/gollum/) repository without having to commit each change for Gollum to actually render it. Just run `./gollum-preview`, edit your markup files and instantly reload your Wiki pages in the browser to preview. Then simply commit your changes.
+Gollum-preview lets you preview file and directory changes in a [Gollum](https://github.com/gollum/gollum/) repository without having to commit each change for Gollum to actually render it. Just run `./gollum-preview`, edit your markup files and instantly reload your Wiki pages in the browser to preview. Then simply commit your changes.
 
 *Problem 1:* Gollum forces you to use its web interface to edit files if you want instant preview or, if you rebel use your favorite text editor instead, to do a commit each time before being able to refresh the matching page in the browser. This is not convenient.
 
