@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+
+###########################################################################
+# Description
+###########################################################################
+#
+# This script watches every .md/.markdown and .org file for changes and
+# creates a new dummy commit by replacing `HEAD' each time (`--amend') so
+# that Gollum has a valid Git repository to work off of.
+
+if [! -z $1];
+then
+  port="1234";
+else
+  port=$1;
+fi
+
+#==========================================================================
+# Change this line if a different Gollum config should be used
+#==========================================================================
+#
+# Start Gollum
+gollum --port $port --show-all --live-preview&
+
+# Store the PID of Gollum to be able to kill it later.
+GOLLUM_PID=$!
+
+# Remove the `temporary' commit when the user presses Ctrl-c/sends a kill
+# signal.
+trap ctrl_c SIGHUP SIGINT SIGTERM
+
+function ctrl_c() {
+  git reset HEAD~1
+  kill -9 $GOLLUM_PID;
+  exit;
+}
+
+# Create a dummy package for `--amend' to place the `temporary' commit on.
+git commit -m 'Dummy commit' --allow-empty;
+
+#==========================================================================
+# Change this line if a different file monitoring tool should be used
+#==========================================================================
+#
+# Create a `temporary' commit on `HEAD' each time a relevant file changes.
+#
+# Alternative (only commit on file changes):
+# fsmonitor -s -p '+*.org' '+*.md' '+*.markdown' bash -c "git add -A && git commit -m '...' --amend";
+#
+# Commit every second.
+while true; do git add -A && git commit -m '...' --amend; sleep 1.0; done
